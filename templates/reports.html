@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Reports & Analytics - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold mb-1">Pandas Analytics & Reports</h2>
+        <p class="text-muted mb-0">Deep dive into your spending distribution and savings trends.</p>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 border-start border-success border-4">
+            <div class="card-body">
+                <span class="text-muted small text-uppercase fw-semibold">Lifetime Income</span>
+                <h3 class="fw-bold text-success mb-0">${{ "{:,.2f}".format(total_income) }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 border-start border-danger border-4">
+            <div class="card-body">
+                <span class="text-muted small text-uppercase fw-semibold">Lifetime Expenses</span>
+                <h3 class="fw-bold text-danger mb-0">${{ "{:,.2f}".format(total_expense) }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 border-start border-primary border-4">
+            <div class="card-body">
+                <span class="text-muted small text-uppercase fw-semibold">Net Savings</span>
+                <h3 class="fw-bold {% if net_savings >= 0 %}text-primary{% else %}text-danger{% endif %} mb-0">
+                    ${{ "{:,.2f}".format(net_savings) }}
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white fw-bold py-3"><i class="bi bi-bar-chart-steps text-info me-2"></i>Income vs Expenses</div>
+            <div class="card-body"><canvas id="incomeVsExpenseChart" height="250"></canvas></div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-6">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white fw-bold py-3"><i class="bi bi-graph-up text-success me-2"></i>Savings Trend</div>
+            <div class="card-body"><canvas id="savingsTrendChart" height="250"></canvas></div>
+        </div>
+    </div>
+</div>
+
+<!-- Category Breakdown Table -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white fw-bold py-3"><i class="bi bi-table text-secondary me-2"></i>Category Breakdown (Pandas GroupBy)</div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr><th>Category</th><th class="text-center">Count</th><th class="text-end">Average</th><th class="text-end">Total</th><th class="text-end">% of Total</th></tr>
+                </thead>
+                <tbody>
+                    {% for cat in category_summary %}
+                    <tr>
+                        <td class="fw-semibold">{{ cat.category }}</td>
+                        <td class="text-center"><span class="badge bg-secondary">{{ cat.count }}</span></td>
+                        <td class="text-end">${{ "{:,.2f}".format(cat.avg_amount) }}</td>
+                        <td class="text-end fw-bold text-danger">${{ "{:,.2f}".format(cat.total_amount) }}</td>
+                        <td class="text-end">{{ cat.pct }}%</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="5" class="text-center py-4 text-muted">No expense data found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
+{% endblock %}

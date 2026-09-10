@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Login - Personal Finance Tracker{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center my-5">
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card shadow border-0 rounded-3">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <div class="bg-success-subtle text-success p-3 rounded-circle d-inline-block mb-2"><i class="bi bi-wallet2 fs-2"></i></div>
+                    <h3 class="fw-bold">Welcome Back</h3>
+                </div>
+                <form action="/login" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Username or Email</label>
+                        <input type="text" name="identifier" class="form-control" autocomplete="username" required autofocus>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">Log In</button>
+                </form>
+                <div class="text-center mt-3">
+                    <span class="text-muted small">No account? </span><a href="/register" class="small fw-bold text-success text-decoration-none">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
